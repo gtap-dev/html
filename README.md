@@ -481,21 +481,3 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
   - [Standalone Twig Linter](https://github.com/asm89/twig-lint)
 
 **[⬆ back to top](#table-of-contents)**
-
-## In the Wild
-
-  - **Mediacurrent**: [Mediacurrent/twig-standards](https://github.com/Mediacurrent/twig-standards)
-
-**[⬆ back to top](#table-of-contents)**
-
-## Translation
-
-  We'd love to have it, so please submit a PR to add your fork in another language!
-
-  - ![ae](https://raw.githubusercontent.com/gosquared/flags/master/flags/flags/shiny/24/United-States.png) **American English**: [cybtachyon/twig-standards](https://github.com/cybtachyon/twig-standards)
-
-## Contributors
-
-- [View Contributors](https://github.com/airbnb/javascript/graphs/contributors)
-
-**[⬆ back to top](#table-of-contents)**
