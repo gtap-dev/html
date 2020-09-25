@@ -4,10 +4,6 @@
 
 This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensiolabs.org/doc/coding_standards.html).
 
-It should be compatible with the [Drupal Twig Coding Standards](https://www.drupal.org/node/1823416).
-
-Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascript).
-
 ## Table of Contents
 
   1. [Tags](#tags)
@@ -20,11 +16,10 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
   1. [Comments](#comments)
   1. [Whitespace](#whitespace)
   1. [Commas](#commas)
-  1. [Naming Conventions](#naming-conventions)
+  1. [Naming conventions](#naming-conventions)
   1. [Resources](#resources)
-  1. [In the Wild](#in-the-wild)
-  1. [Translation](#translation)
-  1. [Contributors](#contributors)
+  1. [Known issues](#known-issues)
+  1. [General](#general)
 
 ## Tags
 
@@ -37,10 +32,10 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
     marked with percentage signs.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {{ sidekicks|replace('{{ robin }}', 'Dick Grayson') }}
 
-    {# Good. #}
+    {# Good #}
     {{ sidekicks|replace('%robin%', 'Jason Todd') }}
     ```
 
@@ -64,61 +59,6 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
 
 ## Blocks
 
-<a name=""></a><a name="7.1"></a>
-  - [7.1]() Blocks that span multiple lines should have their opening and
-    closing tags on their own lines.
-
-    ```twig
-    {# Bad. #}
-    {% include '@components/component.image.twig' with {
-      'src' = image.src,
-      'alt' = image.alt,
-      'attributes' = image.attributes,
-      'sources' = image.sources,
-    } only %}
-
-
-    {# Good. #}
-    {%
-    include '@components/component.image.twig' with {
-      'src' = image.src,
-      'alt' = image.alt,
-      'attributes' = image.attributes,
-      'sources' = image.sources,
-    } only
-    %}
-
-    {# Bad. #}
-    {% set hero = {
-      'firstName': 'Florence',
-      'lastName': 'Nightingale',
-      'inventorOf': ['coxcomb chart', 'modern nursing'],
-    } %}
-
-    {# Good. #}
-    {%
-    set hero = {
-      'firstName': 'Florence',
-      'lastName': 'Nightingale',
-      'inventorOf': ['coxcomb chart', 'modern nursing'],
-    }
-    %}
-
-
-    {# Bad. #}
-    {{ foo
-      |replace({ '_': ' ' })
-      |title
-      |default('foo') }}
-
-    {# Good. #}
-    {{
-    foo
-      |replace({ '_': ' ' })
-      |title
-      |default('foo')
-    }}
-    ```
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -128,158 +68,90 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
 
 ## Whitespace
 
-  <a name="whitespace--spaces"></a><a name="9.1"></a>
-  - [9.1](#whitespace--spaces) Use soft tabs set to 2 spaces.
+  <a name="whitespace--before-blocks"></a><a name="9.1"></a>
+  - [9.1](#whitespace--before-blocks) Place 1 space before the leading brace.
 
     ```twig
-    {# Bad. #}
-    {%
-    set foo = [
-    ∙∙∙∙name
-    ]
-    %}
-
-    {# Bad. #}
-    {%
-    set foo = [
-    ∙name
-    ]
-    %}
-
-    {# Good. #}
-    {%
-    set baz = [
-    ∙∙name;
-    ]
-    %}
-    ```
-
-  <a name="whitespace--before-blocks"></a><a name="9.2"></a>
-  - [9.2](#whitespace--before-blocks) Place 1 space before the leading brace.
-
-    ```twig
-    {# Bad. #}
-    {%
-    set dog={
+    {# Bad #}
+    {% set dog={
       'age': '1 year',
       'breed': 'Bernese Mountain Dog',
-    }
-    %};
+    } %};
 
-    {# Good. #}
-    {%
-    set dog = {
+    {# Good #}
+    {% set dog = {
       'age': '1 year',
-      'breed'': 'Bernese Mountain Dog',
-    }
-    %};
+      'breed': 'Bernese Mountain Dog',
+    } %};
     ```
 
-  <a name="whitespace--around-keywords"></a><a name="9.3"></a>
-  - [9.3](#whitespace--around-keywords) Place 1 space before the opening
+  <a name="whitespace--around-keywords"></a><a name="9.2"></a>
+  - [9.2](#whitespace--around-keywords) Place 1 space before the opening
     parenthesis in control statements (`if`, `for` etc.). Place no space
     between the argument list and the function name in function calls and
     declarations.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {% if(isJedi) %}
       {% set enemy = 'sith' %}
     {% endif %}
 
-    {# Good. #}
+    {# Good #}
     {% if (isJedi) %}
       {% set enemy = 'sith' %}
     %}
 
-    {# Bad. #}
+    {# Bad #}
     {{ jedi|default ('Yoda') }}
 
-    {# Good. #}
+    {# Good #}
     {{ jedi|default('Yoda') }}
     ```
 
-  <a name="whitespace--infix-ops"></a><a name="9.4"></a>
-  - [9.4](#whitespace--infix-ops) Set off operators with spaces.
+  <a name="whitespace--infix-ops"></a><a name="9.3"></a>
+  - [9.3](#whitespace--infix-ops) Set off operators with spaces.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {% set x=y+5 %}
 
-    {# Good. #}
+    {# Good #}
     {% set x = y + 5 %}
     ```
 
-  <a name="whitespace--newline-at-end"></a><a name="9.5"></a>
-  - [9.5](#whitespace--newline-at-end) End files with a single newline
+  <a name="whitespace--newline-at-end"></a><a name="9.4"></a>
+  - [9.4](#whitespace--newline-at-end) End files with a single newline
     character.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {{ stuff }}
     ```
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {{ stuff }}↵
     ↵
     ```
 
     ```twig
-    {# Good. #}
+    {# Good #}
     {{ stuff }}↵
     ```
 
-  <a name="whitespace--chains"></a><a name="9.6"></a>
-  - [9.6](#whitespace--chains) Use indentation when making long filter chains
-    (more than 2 filter chains). Use a leading dot, which emphasizes that the
-    line is a method call, not a new statement.
+  <a name="whitespace--padded-blocks"></a><a name="9.5"></a>
+  - [9.5](#whitespace--padded-blocks) Do not pad your blocks with blank lines.
 
     ```twig
-    {# Bad. #}
-    {{ foo|upper|lower|title|default('foo') }}
-
-    {# Bad. #}
-    {{
-    foo|
-      upper|
-      lower|
-      title|
-      default('foo')
-    }}
-
-    {# Good. #}
-    {{
-    foo
-      |upper
-      |lower
-      |title
-      |default('foo')
-    }}
-
-    {# Bad. #}
-    {{
-    foo|upper
-      |lower|title
-      |default('foo')
-    }}
-
-    {# Good. #}
-    {{ foo|title|default('foo') }}
-    ```
-
-  <a name="whitespace--padded-blocks"></a><a name="9.7"></a>
-  - [9.7](#whitespace--padded-blocks) Do not pad your blocks with blank lines.
-
-    ```twig
-    {# Bad. #}
+    {# Bad #}
     {%
 
       set foo = 'bar'
 
     %}
 
-    {# Bad. #}
+    {# Bad #}
     {% if baz %}
 
       {{ qux }}
@@ -288,12 +160,7 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
 
     {% endif %}
 
-    {# Good. #}
-    {%
-    set foo = 'bar'
-    %}
-
-    {# Good. #}
+    {# Good #}
     {% if baz %}
       {{ qux }}
     {% elseif %}
@@ -301,66 +168,78 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
     {% endif %}
     ```
 
-  <a name="whitespace--in-parens"></a><a name="9.8"></a>
-  - [9.8](#whitespace--in-parens) Do not add spaces inside parentheses.
+  <a name="whitespace--in-parens"></a><a name="9.6"></a>
+  - [9.6](#whitespace--in-parens) Do not add spaces inside parentheses.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {{ foo|default( 'foo' ) }}
 
-    {# Good. #}
+    {# Good #}
     {{ foo|default('foo') }}
     ```
 
-  <a name="whitespace--in-brackets"></a><a name="9.9"></a>
-  - [9.9](#whitespace--in-brackets) Do not add spaces inside brackets.
+  <a name="whitespace--in-brackets"></a><a name="9.7"></a>
+  - [9.7](#whitespace--in-brackets) Do not add spaces inside brackets.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {% set foo = [ 1, 2, 3 ] %}
     {{ foo.0 }}
 
-    {# Good. #}
+    {# Good #}
     {% set foo = [1, 2, 3] %}
     {{ foo.0 }}
     ```
 
   <a name="whitespace--in-braces"></a><a name="9.10"></a>
-  - [9.10](#whitespace--in-braces) Add spaces inside curly braces.
+  - [9.8](#whitespace--in-braces) Add spaces inside curly braces.
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {% set foo = {clark: 'kent'} %}
 
-    {# Good. #}
+    {# Good #}
     {% set foo = { clark: 'kent' } %}
     ```
 
-  <a name="whitespace--max-len"></a><a name="9.11"></a>
-  - [9.11](#whitespace--max-len) Avoid having lines of code that are longer than
-    80 characters (including whitespace).
+  <a name="whitespace--max-len"></a><a name="9.9"></a>
+  - [9.9](#whitespace--max-len) Avoid having everything in one line.
 
     > Why? This ensures readability and maintainability.
 
     ```twig
-    {# Bad. #}
-    {% set foo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' %}
-
-    {# Bad. #}
+    {# Bad #}
     {% if victory|default %}{{ congratulations }}{% else %}{{ failure }}{% endif %}
 
-    {# Good. #}
-    {%
-    set foo = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed ' ~
-      'do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-    %}
-
-    {# Good. #}
+    {# Good #}
     {% if victory|default %}
       {{ congratulations }}
     {% else %}
       {{ failure }}
     {% endif %}
+    ```
+    
+  <a name="whitespace--attibutes"></a><a name="9.10"></a>
+  - [9.10](#whitespace--attibutes) Avoid having too much attributes in single line.
+
+    > Why? This ensures readability and maintainability.
+
+    ```twig
+    {# Bad #}
+    <img loading="lazy" src="{{ placeholderSrc }}" data-srcset="{{ data.srcset }}" data-sizes="auto" alt="{{ data.alt }}" {% if data.width %}width="{{ data.width }}"{% endif %} {% if data.title %}title="{{ data.title }}"{% endif %} class="image__img lazyload">
+
+    {# Good #}
+    <img
+        loading="lazy"
+        src="{{ placeholderSrc }}"
+        data-srcset="{{ data.srcset }}"
+        data-sizes="auto"
+        alt="{{ data.alt }}"
+        {% if data.width %}width="{{ data.width }}"{% endif %}
+        {% if data.title %}title="{{ data.title }}"{% endif %}
+        class="image__img lazyload"
+    >
     ```
 
 **[⬆ back to top](#table-of-contents)**
@@ -371,7 +250,7 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
   - [10.1](#commas--leading-trailing) Leading commas: **No.**
 
     ```twig
-    {# Bad. #}
+    {# Bad #}
     {%
     set story = [
       'once'
@@ -381,96 +260,33 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
     ]
     %}
 
-    {# Good. #}
-    {%
-    set story = [
+    {# Good #}
+    {% set story = [
       once,
       upon,
       aTime,
-    ];
-    %}
+    ]; %}
 
-    {# Bad. #}
-    {%
-    set hero = {
+    {# Bad #}
+    {% set hero = {
         'firstName': 'Ada'
       , 'lastName': 'Lovelace'
       , 'birthYear': '1815'
       , 'superPower': 'computers'
-    }
-    %}
+    } %}
 
-    {# Good. #}
-    {%
-    set hero = {
+    {# Good #}
+    {% set hero = {
       'firstName': 'Ada',
       'lastName': 'Lovelace',
       'birthYear': '1815',
-      'superPower': 'computers',
-    %}
-    ```
-
-  <a name="commas--dangling"></a><a name="19.2"></a>
-  - [10.2](#commas--dangling) Additional trailing comma: **Yes.**
-
-    > Why? This leads to cleaner git diffs.
-
-    ```twig
-    {# Bad. Git diff. #}
-    {%
-    set hero = {
-         'firstName': 'Florence',
-    -    'lastName': 'Nightingale'
-    +    'lastName': 'Nightingale',
-    +    'inventorOf': ['coxcomb chart', 'modern nursing']
-    }
-    %}
-
-    {# Good. Git diff. #}
-    {%
-    set hero = {
-         'firstName': 'Florence',
-         'lastName': 'Nightingale',
-    +    'inventorOf': ['coxcomb chart', 'modern nursing'],
-    }
-    %}
-    ```
-
-    ```twig
-    {# Bad. #}
-    {%
-    set hero = {
-      firstName: 'Dana',
-      lastName: 'Scully'
-    }
-    %}
-
-    {%
-    set heroes = [
-      'Batman',
-      'Superman'
-    ]
-    %}
-
-    {# Good. #}
-    {%
-    set hero = {
-      'firstName': 'Dana',
-      'lastName': 'Scully',
-    }
-    %}
-
-    {%
-    set heroes = [
-      'Batman',
-      'Superman',
-    ]
-    %}
+      'superPower': 'computers'
+    } %}
     ```
 
 **[⬆ back to top](#table-of-contents)**
 
-## Naming Conventions
+## Naming conventions
 
 **[⬆ back to top](#table-of-contents)**
 
@@ -479,5 +295,87 @@ Very heavily 'inspired' by [airbnb/Javascript](https://github.com/airbnb/javascr
 **Tools**
 
   - [Standalone Twig Linter](https://github.com/asm89/twig-lint)
+
+**[⬆ back to top](#table-of-contents)**
+
+## Known issues
+
+You can use majority of twig functions, but there are some restrictions ins styleguide,  because we use twig js adapter
+
+<a name="known-issues--macro"></a><a name="13.1"></a>
+  - [13.1](#known-issues--macro) Include inside macro not working very well. Example:
+
+    ```twig
+    {% macro li(item, class, icon) %}
+        <li class="pagination__item {{ class }}">
+            <a href="{{ item.url }}" class="pagination__link">
+                {% include '@icon' with { name: icon } %}
+                {{ item.text }}
+            </a>
+        </li>
+    {% endmacro %}
+
+    {{ ul.li(data.item, 'pagination__item--first', 'arrow') }}
+    ```
+    
+    You can fix this issue by sending whole icon component into macro. Example:
+    
+    ```twig
+        {% macro li(item, class, icon) %}
+            <li class="pagination__item {{ class }}">
+                <a href="{{ item.url }}" class="pagination__link">
+                    {{ icon }}
+                    {{ item.text }}
+                </a>
+            </li>
+        {% endmacro %}
+    
+        {% set icon %}
+            {% include '@icon' with { name: 'arrow' } %}
+        {% endset %}
+        {{ ul.li(data.item, 'pagination__item--first', icon) }}
+    ```
+    
+    It's not nice but will work. 
+
+**[⬆ back to top](#table-of-contents)**
+
+## General
+
+<a name="general--if-wrapping"></a><a name="14.1"></a>
+  - [14.1](#general--if-wrapping) If data existence is questionable, use twig IF {% if data %}{% endif %}
+
+    ```twig
+    {# Bad #}
+    <div class="textfield__error">
+        {{ data.error }}
+    </div>
+
+    {# Bad #}
+    <div class="textfield__error">
+        {% if data.error %}
+            {{ data.error }}
+        {% endif %}
+    </div> 
+    
+    {# Good (no unnecessary html) #}
+    {% if data.error %}
+        <div class="textfield__error">
+            {{ data.error }}
+        </div>
+    {% endif %}
+    ```
+    
+<a name="general--use-data"></a><a name="14.2"></a>
+  - [14.2](#general--use-data) Use data.something only if data really comes from back-end and is changeable
+
+    ```twig
+    Example if button icon is fixed and admin can't change it.
+    
+    <button type="button">
+        {{ data.text }}
+        {% include '@icon' with { name: icon, class: 'button__icon', modifier: '' } %}
+    </button>
+    ```
 
 **[⬆ back to top](#table-of-contents)**
