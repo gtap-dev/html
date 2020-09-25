@@ -74,14 +74,14 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
     ```twig
     {# Bad #}
     {% set dog={
-      'age': '1 year',
-      'breed': 'Bernese Mountain Dog',
+        'age': '1 year',
+        'breed': 'Bernese Mountain Dog',
     } %};
 
     {# Good #}
     {% set dog = {
-      'age': '1 year',
-      'breed': 'Bernese Mountain Dog',
+        'age': '1 year',
+        'breed': 'Bernese Mountain Dog',
     } %};
     ```
 
@@ -94,13 +94,13 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
     ```twig
     {# Bad #}
     {% if(isJedi) %}
-      {% set enemy = 'sith' %}
+        {% set enemy = 'sith' %}
     {% endif %}
 
     {# Good #}
     {% if (isJedi) %}
-      {% set enemy = 'sith' %}
-    %}
+        {% set enemy = 'sith' %}
+    {% endif %}
 
     {# Bad #}
     {{ jedi|default ('Yoda') }}
@@ -214,9 +214,9 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
 
     {# Good #}
     {% if victory|default %}
-      {{ congratulations }}
+        {{ congratulations }}
     {% else %}
-      {{ failure }}
+        {{ failure }}
     {% endif %}
     ```
     
@@ -251,14 +251,12 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
 
     ```twig
     {# Bad #}
-    {%
-    set story = [
+    {% set story = [
       'once'
     , 'upon'
     , 'a'
     , 'time'
-    ]
-    %}
+    ] %}
 
     {# Good #}
     {% set story = [
