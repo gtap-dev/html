@@ -501,3 +501,79 @@ You can use majority of twig functions, but there are some restrictions in style
         {% include '@icon' with { name: icon, class: 'button__icon', modifier: '' } %}
     </button>
     ```
+
+## HTML
+
+<a name="html--semantics"><a name="15.1"></a>
+  - [15.1](#html--semantics) Use semantic [HTML elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element), wherever appropriate.
+
+    This is to ensure basic usability of the website for all people.
+
+    ```twig
+    {# Bad #}
+    {# Clickable div that does not have role button nor is tabbable. #}
+    <div onclick="">
+        {{ data.text }}
+    </div>
+    <a href="#">this is a button that has interactivity via JS and no real href</a>
+
+    {# Good #}
+    <button onclick="">
+        {{ data.text }}
+    </button>
+    <button>this is a button that has interactivity via JS</button>
+    ```
+
+<a name="html--landmarks"><a name="15.2"></a>
+  - [15.2](#html--landmarks) Use appropriate landmarks to convey important parts of the website to assistive tech.
+
+    See examples in [WAI-ARIA Authoring Practises](https://www.w3.org/TR/wai-aria-practices-1.1/#aria_landmark).
+
+
+<a name="html--semantic-content-order"><a name="15.3"></a>
+  - [15.3](#html--semantic-content-order) Make sure your content order is semantic.
+
+    Sometimes due to design quirks HTML structure cannot be semantically correct. In these cases you can hide the wrongfully placed elements using `aria-hidden="true"` and add visually hidden elements to semantically appropriate places, thus making content order correct and accessible.
+
+    ```twig
+    {# Bad #}
+    <section>
+        <div class="content">...</div>
+        <h2>Section title</h2>
+        <div class="content">...</div>
+    </section>
+
+    {# Better #}
+    <section>
+        <h2 class="h-visually-hidden">Section title</h2>
+        <div class="content">...</div>
+        <h2 aria-hidden="true">Section title</h2>
+        <div class="content">...</div>
+    </section>
+
+    {# Best #}
+    {# Work with your designer to make sure the design order follows semantic order! #}
+    <section>
+        <h2>Section title</h2>
+        <div class="content">...</div>
+        <div class="content">...</div>
+    </section>
+    ```
+
+<a name="html--accessibility"><a name="15.4"></a>
+  - [15.4](#html--accessibility) Use appropriate ARIA behavior on interactive components that do not exist natively in HTML.
+
+    For example: alerts, dialogs, tooltips, accordions, tabs, autocomplete inputs do not have native HTML elements that convey their behavior and semantics to assistive technology.
+
+    These kinds of interactive components need to have appropriate ARIA roles and JavaScript functionality to work properly for everyone.
+
+    Please explore the [WAI-ARIA Authoring Practises](https://www.w3.org/TR/wai-aria-practices-1.1/) document for specific examples and explanations.
+
+<a name="html--target-blank"><a name="15.5"></a>
+  - [15.5](#html--target-blank) Avoid using `target="_blank"` on links.
+
+    Do not force people to new tabs/windows when it is not strictly necessary. People who want to open links in new tabs usually know how to do this themselves.
+
+    See this [CSS-Tricks article](https://css-tricks.com/use-target_blank/) for more explanations.
+
+    If you absolutely must use `target="_blank"` on links, use `rel="noreferrer` with it.
