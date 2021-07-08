@@ -1,4 +1,4 @@
-# Twig & HTML <guide-lines />
+# Twig & HTML `<guide-lines />`
 
 *A mostly reasonable approach to Twig*
 
