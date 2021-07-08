@@ -1,29 +1,12 @@
-# Twig(HTML) { guide: lines; }
+# Twig & HTML <guide-lines />
 
 *A mostly reasonable approach to Twig*
 
-This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensiolabs.org/doc/coding_standards.html).
+This is a superset of the [Official SensioLabs Twig Standards](https://twig.symfony.com/doc/1.x/coding_standards.html).
 
-## Table of Contents
+## Resources
 
-  1. [Tags](#tags)
-  1. [Filters](#filters)
-  1. [Functions](#functions)
-  1. [Tests](#tests)
-  1. [Operators](#operators)
-  1. [Variables](#variables)
-  1. [Blocks](#blocks)
-  1. [Comments](#comments)
-  1. [Whitespace](#whitespace)
-  1. [Commas](#commas)
-  1. [Naming conventions](#naming-conventions)
-  1. [Resources](#resources)
-  1. [Known issues](#known-issues)
-  1. [General](#general)
-
-## Tags
-
-**[⬆ back to top](#table-of-contents)**
+- [Twig docs](https://twig.symfony.com/doc/1.x/).
 
 ## Filters
 
@@ -39,32 +22,109 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
     {{ sidekicks|replace('%robin%', 'Jason Todd') }}
     ```
 
-**[⬆ back to top](#table-of-contents)**
+<a name="default-data-logic"><a name="2.2"></a>
+  - [2.2]() Do not use the default filter for default data.
+
+    Default data should come from context. Use default filter for logic only.
+
+    ```twig
+    {# Bad #}
+    {{ url|default('#') }}
+
+    {# Good #}
+    {{ url|default(data.url) }}
+    ```
+
+<a name="merge-filter"><a name="2.3"></a>
+  - [2.3]() Use merge filter to add to arrays or objects.
+
+    Note that you need to make sure the array/object is iterable.
+
+    ```twig
+    {# Bad #}
+    {% include '@button' with { data: { text: data.button.text, icon: '#arrow-right' } } %}
+
+    {# Good #}
+    {% include '@button' with { data: data.button|merge({ icon: '#arrow-right' }) } %}
+    ```
+
+<a name="escape-filter"><a name="2.4"></a>
+  - [2.4]() Escape data and values in HTML attributes with the `escape` filter.
+
+    ```twig
+    {# Bad #}
+    <button data-name="{{ data.name }}">
+
+    {# Good #}
+    <button data-name="{{ data.name|escape('html_attr') }}">
+    ```
+
+<a name="avoid-filters"><a name="2.5"></a>
+  - [2.5]() If possible, avoid transforming data with filters. Transform data beforehand, in PHP.
 
 ## Functions
 
-**[⬆ back to top](#table-of-contents)**
+<a name="dump-function"><a name="3.1"></a>
+  - [3.1]() Use dump function to debug data.
 
-## Tests
+    Wrap the output with a `pre` tag to make it easier to read.
 
-**[⬆ back to top](#table-of-contents)**
+    ```twig
+    <pre>
+      {{ dump(user) }}
+    </pre>
+    ```
 
 ## Operators
 
-**[⬆ back to top](#table-of-contents)**
+<a name="do-not-use-math"><a name="4.1"></a>
+  - [4.1]() Do not use Math operators.
+
+    Math is calculation logic that should stay in PHP.
+
+    As an example, instead of the mod operator, use batching.
+    ```twig
+    {# Bad #}
+    {% for row in items %}
+      {% if loop.index == 1 or (loop.index % 3) == 1 %}
+        {# do something with every third item #}
+      {% endif %}
+    {% endfor %}
+
+    {# Good #}
+    {% for row in items|batch(3) %}
+      {% for column in row %}
+        {% if loop.index == 1 %}
+          {# do something with every third item #}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    ```
+
 
 ## Variables
 
-**[⬆ back to top](#table-of-contents)**
+<a name="use-set-tags-for-variables"><a name="5.1"></a>
+  - [5.1]() Use variables to store common values in templates.
 
-## Blocks
-
-
-**[⬆ back to top](#table-of-contents)**
+    Instead of doing the same template logic in multiple instances, save the values to variables with `set` tags.
 
 ## Comments
 
-**[⬆ back to top](#table-of-contents)**
+<a name="use-set-tags-for-variables"><a name="6.1"></a>
+  - [6.1]() Use Twig comments to convey important implementation information to other developers.
+
+    Twig comments will be compiled away, HTML comments are transferred and visible in source to all users.
+
+    ```twig
+    {# Bad #}
+    <!-- TODO: id should not be static -->
+    <input id="input-1" />
+
+    {# Good #}
+    {# TODO: id should not be static #}
+    <input id="input-1" />
+    ```
 
 ## Whitespace
 
@@ -219,9 +279,9 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
         {{ failure }}
     {% endif %}
     ```
-    
-  <a name="whitespace--attibutes"></a><a name="9.10"></a>
-  - [9.10](#whitespace--attibutes) Avoid having too much attributes in single line.
+
+  <a name="whitespace--attributes"></a><a name="9.10"></a>
+  - [9.10](#whitespace--attributes) Avoid having too much attributes in single line.
 
     > Why? This ensures readability and maintainability.
 
@@ -242,12 +302,60 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
     >
     ```
 
-**[⬆ back to top](#table-of-contents)**
+  <a name="whitespace--single-attribute"></a><a name="9.11"></a>
+  - [9.11](#whitespace--single-attribute) Avoid having too much logic in a single HTML attribute.
 
-## Commas
+    > Why? This ensures readability and maintainability.
 
-<a name="commas--leading-trailing"></a><a name="10.1"></a>
-  - [10.1](#commas--leading-trailing) Leading commas: **No.**
+    Instead, split the logic to a separate variable block with whitespace control.
+
+    ```twig
+    {# Bad #}
+    <div class="textfield{% if modifier %} {{ modifier }}{% endif %}{% if class %} {{ class }}{% endif %}{% if data.isInvalid %} is-invalid{% endif %}{% if data.isDisabled %} is-disabled{% endif %}{% if data.icon %} textfield--icon{% endif %}"></div>
+
+    {# Good #}
+    {% set BEM -%}
+      textfield
+      {% if modifier %} {{ modifier }}{% endif %}
+      {%- if class %} {{ class }}{% endif %}
+      {%- if data.isInvalid %} is-invalid{% endif %}
+      {%- if data.isDisabled %} is-disabled{% endif %}
+      {%- if data.icon %} textfield--icon{% endif %}
+    {% endset %}
+    <div class="{{ BEM }}"></div>
+    ```
+
+<a name="whitespace--indenting"></a><a name="9.12"></a>
+  - [9.12](#whitespace--indenting) Indenting nested logic and blovks
+
+    For consistency, everything that is nested should be indented by one level more than its context. (Even if it breaks HTML indentation)
+
+    ```twig
+    {# Bad #}
+    {% if data.title %}
+    {{ data.title }}
+    {% endif %}
+
+    <div class="row__one">{{ data.rowOne }}</div>
+    {% if data.rowTwo %}
+    <div class="row__two">{{ data.rowTwo }}</div>
+    {% endif %}
+
+    {# Good #}
+    {% if data.title %}
+        {{ data.title }}
+    {% endif %}
+
+    <div class="row__one">{{ data.rowOne }}</div>
+    {% if data.rowTwo %}
+        <div class="row__two">{{ data.rowTwo }}</div>
+    {% endif %}
+    ```
+
+## Stylistic rules
+
+<a name="styles--leading-trailing"></a><a name="10.1"></a>
+  - [10.1](#styles--leading-trailing) Leading commas: **No.**
 
     ```twig
     {# Bad #}
@@ -263,7 +371,7 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
       once,
       upon,
       aTime,
-    ]; %}
+    ] %}
 
     {# Bad #}
     {% set hero = {
@@ -282,23 +390,40 @@ This is a superset of the [Official SensioLabs Twig Standards](http://twig.sensi
     } %}
     ```
 
-**[⬆ back to top](#table-of-contents)**
+<a name="styles--quotes"></a><a name="10.2"></a>
+  - [10.2](#styles--quotes) Use double quotes for HTML attributes, single quotes for everything else.
+
+    ```twig
+    {# Bad #}
+    <input value='bad' />
+
+    {# Good #}
+    <input value="good" />
+    <input value="\"good\"" />
+
+    {# Bad #}
+    {% set hero = "bad" %}
+
+    {# Good #}
+    {% set hero = 'good' %}
+    ```
 
 ## Naming conventions
 
-**[⬆ back to top](#table-of-contents)**
+  - [11.1](#naming-camelCase) Use camelCase to name variables.
 
-## Resources
+    ```twig
+    {# Bad #}
+    {% set story_of_my_life = 'cry baby cry' %}
+    {% set storyofmylife = 'cry baby cry' %}
 
-**Tools**
-
-  - [Standalone Twig Linter](https://github.com/asm89/twig-lint)
-
-**[⬆ back to top](#table-of-contents)**
+    {# Good #}
+    {% set storyOfMyLife = 'cry baby cry' %}
+    ```
 
 ## Known issues
 
-You can use majority of twig functions, but there are some restrictions ins styleguide,  because we use twig js adapter
+You can use majority of twig functions, but there are some restrictions in styleguide, because we use Twig.js adapter.
 
 <a name="known-issues--macro"></a><a name="13.1"></a>
   - [13.1](#known-issues--macro) Include inside macro not working very well. Example:
@@ -315,9 +440,9 @@ You can use majority of twig functions, but there are some restrictions ins styl
 
     {{ ul.li(data.item, 'pagination__item--first', 'arrow') }}
     ```
-    
+
     You can fix this issue by sending whole icon component into macro. Example:
-    
+
     ```twig
         {% macro li(item, class, icon) %}
             <li class="pagination__item {{ class }}">
@@ -327,21 +452,22 @@ You can use majority of twig functions, but there are some restrictions ins styl
                 </a>
             </li>
         {% endmacro %}
-    
+
         {% set icon %}
             {% include '@icon' with { name: 'arrow' } %}
         {% endset %}
         {{ ul.li(data.item, 'pagination__item--first', icon) }}
     ```
-    
-    It's not nice but will work. 
 
-**[⬆ back to top](#table-of-contents)**
+    It's not nice but will work.
 
 ## General
 
-<a name="general--if-wrapping"></a><a name="14.1"></a>
-  - [14.1](#general--if-wrapping) If data existence is questionable, use twig IF {% if data %}{% endif %}
+<a name="general--twig-php-and-js"><a name="14.1"></a>
+  - [14.1]() When deciding to choose whether to use a certain Twig functionality, make sure it is supported by both Twig PHP and [Twig.js](https://github.com/twigjs/twig.js) as we generally use both in our projects.
+
+<a name="general--if-wrapping"></a><a name="14.2"></a>
+  - [14.2](#general--if-wrapping) If data existence is questionable, use twig if tag.
 
     ```twig
     {# Bad #}
@@ -354,8 +480,8 @@ You can use majority of twig functions, but there are some restrictions ins styl
         {% if data.error %}
             {{ data.error }}
         {% endif %}
-    </div> 
-    
+    </div>
+
     {# Good (no unnecessary html) #}
     {% if data.error %}
         <div class="textfield__error">
@@ -363,17 +489,15 @@ You can use majority of twig functions, but there are some restrictions ins styl
         </div>
     {% endif %}
     ```
-    
-<a name="general--use-data"></a><a name="14.2"></a>
-  - [14.2](#general--use-data) Use data.something only if data really comes from back-end and is changeable
+
+<a name="general--use-data"></a><a name="14.3"></a>
+  - [14.3](#general--use-data) Use data.something only if data really comes from back-end and is changeable
 
     ```twig
     Example if button icon is fixed and admin can't change it.
-    
+
     <button type="button">
         {{ data.text }}
         {% include '@icon' with { name: icon, class: 'button__icon', modifier: '' } %}
     </button>
     ```
-
-**[⬆ back to top](#table-of-contents)**
